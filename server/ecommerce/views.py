@@ -179,6 +179,23 @@ class ProductViewSet(ModelViewSet):
         return {'user_id':user_id}    
 
 
+    def list(self, request, *args, **kwargs):
+        """  
+        Overriding the method for custom response
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return cr.success(
+            data=serializer.data
+            )
+    
+
     def retrieve(self, request, *args, **kwargs):
         """ 
         Customized the default retrieve method for showing
