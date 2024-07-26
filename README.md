@@ -3,10 +3,7 @@
 
 
 
-
-
-
-Technologies used:Django, Django Rest Framework,Simple JWT ,Celery, Django Debug Toolbar, PostgreSQL, Redis,Faker,Django-Filter,Django-dotenv,pytest,pytest-django and more
+Technologies used for server-side:Django, Django Rest Framework,Simple JWT ,Celery, Django Debug Toolbar, PostgreSQL, Redis,Faker,Django-Filter,Django-dotenv,pytest,pytest-django and more
 
 
     Please Use Better Comments Extension of VsCode for better 
@@ -24,13 +21,13 @@ https://documenter.getpostman.com/view/30946823/2sA2r535Mj
 
 
 
-## Installation
+## Installation For Server-Side
 
 
 1-First of all clone this repo
 --
 
-        https://github.com/AyushTmg/Ecommerce-API.git
+        git clone https://github.com/AyushTmg/Ecommerce-API.git
 
 
 2-Setup a virtual enviroment 
@@ -101,8 +98,6 @@ https://documenter.getpostman.com/view/30946823/2sA2r535Mj
 
 
 
-
-
 ## For Running Test
 
 ### Running Tests
@@ -119,6 +114,24 @@ For continuous testing to update code and test simultaneously, use:
 
 
         ptw
+
+
+### Note: I assume you have already cloned the repository while setting up the server-side.
+
+
+# Installation For Client Side
+
+## 1- Navigate to the client directory
+        cd client 
+
+## 2- Install dependencies
+        npm install
+
+## 3- Run the development server
+        npm run dev 
+
+
+
 
 ## Contribution
 
