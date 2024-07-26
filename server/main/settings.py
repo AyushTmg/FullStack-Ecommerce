@@ -158,7 +158,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL='authentication.User'
 
 
-
 # ! SIMPLE JWT CONFIGURATION'S
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -209,16 +208,10 @@ SUPPLIER_EMAIL=os.environ.get('THE_SUPPLIER_EMAIL')
 
 
 # ! CORS ALLOWED ORGIN FOR ALL 
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
 
 
 # ! CORS ALLOWED ORIGINS FOR SPECIFIED ORIGINS
-""" 
-uncomment and add origins if you want to allows only
-some orgins to be allowed for CORS
-"""
-#* CORS_ALLOWED_ORIGINS = [
-    # ! Example origins
-    #? "http://localhost:8080",
-    #? "http://127.0.0.1:9000"
-#* ]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]
