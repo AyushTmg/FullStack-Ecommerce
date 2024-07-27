@@ -3,7 +3,6 @@ from .tasks import activation_email_task, password_reset_task
 from utils.exception.exception import CustomException as ce 
 
 
-
 from django.db import transaction
 from django.utils.encoding import smart_str, force_bytes
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -52,10 +51,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         password=attrs.get('password')
         password_confirmation=attrs.get('password_confirmation')
 
-        if password!= password_confirmation:
+        if password!=password_confirmation:
             raise ce(
-                message="Two Password doesn't match "
-                )
+                message="Form Validation Error",
+                errors={
+                "password": [
+                        "The two password field doesn't match."
+                ],
+                "password_confirmation": [
+                        "The two password field doesn't match."
+                ]
+                }
+            )
         
         return attrs
     
@@ -75,19 +82,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
                 user.set_password(validated_data['password'])
                 user.save()
-                uid=urlsafe_base64_encode(force_bytes(user.id))
-                token=PasswordResetTokenGenerator().make_token(user)
-                link=f'http://127.0.0.1:8000/api/auth/activate/{uid}/{token}/'
-                subject="Account activation"
-                email=user.email
-
-                data={
-                    "subject":subject,
-                    "link":link,
-                    "to_email":email
-                }
-
-                activation_email_task.delay(data)
                 return user 
             
         except Exception as e:
@@ -96,36 +90,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 message="Somme Error occoured during registration"
                 )
     
-
-
-
-#! Serializer for User Account Activation
-class UserActivationSerializer(serializers.Serializer):
-    def validate(self, attrs):
-        """ 
-        Check the UID and Token to activate User's
-        Account
-        """
-        try:
-            uid=self.context['uid']
-            token=self.context['token']
-            id=smart_str(urlsafe_base64_decode(uid))
-            user=User.objects.get(id=id)
-
-            if not PasswordResetTokenGenerator().check_token(user,token):
-                raise ce(
-                    message="Tokens doesn't match or is exprired"
-                    )
-            
-            user.is_active=True
-            user.save()
-            return attrs
-        
-        except Exception as e:
-            raise ce(
-                message="Somme Error occoured during activation"
-                )
-
 
 
 

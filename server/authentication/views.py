@@ -5,28 +5,18 @@ from .tokens import get_tokens_for_user
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.status import HTTP_201_CREATED,HTTP_401_UNAUTHORIZED,HTTP_404_NOT_FOUND
 
 
 from .serializers import ( 
     UserRegistrationSerializer,
-    UserActivationSerializer,
     UserLoginSerializer,
     UserChangePasswordSerializer,
     SendResetPasswordEmailSerializer,
     PasswordResetSerializer,
     UserAccountDeleteSerializer
 )
-
-
-
-
-#! Generates token manually
-
-
-
 
 
 # ! View For User Registration 
@@ -36,32 +26,17 @@ class UserRegistrationView(APIView):
 
     def post(self,request) -> Response:
         serializer=self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        
-        return cr.success(
-            message="Registered successfully,Activation link has been sent to your email",
-            status=HTTP_201_CREATED
-        )
-
-
-
-
-
-# ! View For User Activation
-class UserActivationView(APIView):
-    serializer_class=UserActivationSerializer
-
-    def post(self,request,**kwargs)-> Response:
-        uid=self.kwargs['uid']
-        token=self.kwargs['token']
-        serializer=self.serializer_class(data=request.data,context={'uid':uid,"token":token})
-        serializer.is_valid(raise_exception=True)
-        
-        return cr.success(
-            message="Your account has been successfully activated"
-        )
-
+        if serializer.is_valid():
+            serializer.save()
+            return cr.success(
+                message="Your account has been successfully registered",
+                status=HTTP_201_CREATED
+            )
+        return cr.error(
+            message="Form Validation Error",
+            errors=serializer.errors
+            )
+    
 
 
 
@@ -75,7 +50,10 @@ class UserLoginView(APIView):
 
         email=serializer.data.get('email')
         password = serializer.validated_data.get('password')
-        user=authenticate(email=email,password=password)
+        user=authenticate(
+            email=email,
+            password=password
+        )
 
         if user is not  None:
             token=get_tokens_for_user(user)
@@ -86,11 +64,10 @@ class UserLoginView(APIView):
         
         else:
             return cr.error(
-                message="Invalid Credential provided or Account is not active",
+                message="Invalid credential. Please try again",
                 status=HTTP_401_UNAUTHORIZED
             )
             
-
 
 
 
