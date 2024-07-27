@@ -2,7 +2,7 @@ import axios from "axios";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constant";
 
 const api = axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL: "http://localhost:8000/api/",
 }
 )
 
