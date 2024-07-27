@@ -1,0 +1,24 @@
+.toastify-content {
+    font-family: Arial, sans-serif;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #333;
+    color: #fff;
+}
+
+.toastify-toast {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toastify-error {
+    background-color: #ff6347;
+}
+
+.toastify-success {
+    background-color: #32cd32;
+}
+
+.toastify-icon {
+    display: none;
+}
