@@ -3,11 +3,12 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 
 class CustomException(APIException):
     
-    def __init__(self,message=None, status=None):
+    def __init__(self,message=None, status=None,errors=None):
         if message is not None:
             self.detail = { 
                 'success':False ,
-                "message":message
+                "message":message,
+                'errors':errors
             }
             
         if status is not None:

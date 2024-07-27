@@ -21,14 +21,15 @@ class  CustomResponse:
     
 
     @staticmethod
-    def error(message="Error",status=HTTP_400_BAD_REQUEST) -> Response:
+    def error(message="Error",status=HTTP_400_BAD_REQUEST,errors="") -> Response:
         """
         This custom method is used to return error
         response 
         """
         return Response({
             'success':False,
-            "message":message
+            "message":message,
+            'errors':errors
         },
         status=status
     )
