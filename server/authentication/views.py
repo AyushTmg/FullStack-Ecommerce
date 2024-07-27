@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from utils.response.response import CustomResponse as cr
+from .tokens import get_tokens_for_user
 
 
 from rest_framework.views import APIView
@@ -23,16 +24,7 @@ from .serializers import (
 
 
 #! Generates token manually
-def get_tokens_for_user(user):
-    """
-    Method which generates the tokens 
-    """
-    refresh = RefreshToken.for_user(user)
 
-    return {
-        'refresh':str(refresh),
-        'access': str(refresh.access_token),
-    }
 
 
 
