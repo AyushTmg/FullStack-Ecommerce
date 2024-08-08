@@ -21,7 +21,7 @@ class  CustomResponse:
     
 
     @staticmethod
-    def error(message="Error",status=HTTP_400_BAD_REQUEST,errors="") -> Response:
+    def error(message="Error",status=HTTP_400_BAD_REQUEST,errors={}) -> Response:
         """
         This custom method is used to return error
         response 
