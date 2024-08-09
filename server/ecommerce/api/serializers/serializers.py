@@ -1,4 +1,4 @@
-from .models import (
+from ...models import (
     Collection,
     Product,
     ProductImage,
@@ -9,8 +9,8 @@ from .models import (
     Order,
     OrderItem
 )
-from .signals import order_created
-from utils.exception.exception import CustomException as ce
+from ...signals import order_created
+from utils.exception import CustomException as ce
 
 
 

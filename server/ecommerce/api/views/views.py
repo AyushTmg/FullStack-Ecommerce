@@ -1,5 +1,5 @@
 
-from .models import (
+from ...models import (
     Collection,
     Product,
     ProductImage,
@@ -10,7 +10,7 @@ from .models import (
     Order,
 )
 
-from .serializers import (
+from ..serializers.serializers import (
     CollectionSerializer,
     ProductSerailizer,
     ProductImageSerializer,
@@ -27,11 +27,11 @@ from .serializers import (
 )
 
 
-from .filters import ProductFilter
-from .pagination import Default
-from .tasks import send_order_cancellation_email_task
-from .permissions import IsObjectUserOrAdminUserElseReadOnly
-from utils.response.response import CustomResponse as cr 
+from ..filters import ProductFilter
+from ..paginations import Default
+from ...tasks import send_order_cancellation_email_task
+from ...permissions import IsObjectUserOrAdminUserElseReadOnly
+from utils.response import CustomResponse as cr 
 
 
 from rest_framework import permissions

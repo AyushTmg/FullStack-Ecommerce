@@ -1,4 +1,4 @@
-from .views import (
+from .views.views import (
     CollectionViewSet,
     ProductViewSet,
     ProductImageViewSet,
