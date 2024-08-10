@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from authentication.models import  User
-from ecommerce.serializers import OrderSerializer,ReviewSerailizer
+from ecommerce.api.serializers import OrderSerializer,ReviewSerailizer
 
 
 
