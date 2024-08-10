@@ -1,4 +1,4 @@
-from .product import SimpleProductSerializer
+from .product import ProductSerailizer
 from ...signals import order_created
 from utils.exception import CustomException as ce
 from rest_framework import serializers
@@ -12,11 +12,9 @@ from ...models import (
 
 
 
-
-
 # !Order Item Serializer
 class OrderItemSerailizer(serializers.ModelSerializer):
-    product=SimpleProductSerializer()
+    product=ProductSerailizer(fields=['title','product_image'])
     total_product_price=serializers.SerializerMethodField(method_name='get_total_product_price')
 
     def  get_total_product_price(self,order_item):

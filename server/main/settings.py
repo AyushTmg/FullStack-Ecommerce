@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",# !Debug Toolbar Middleware
+    # 'cuser.middleware.CuserMiddleware',#! Cuser Middleware
 ]
 
 ROOT_URLCONF = 'main.urls'

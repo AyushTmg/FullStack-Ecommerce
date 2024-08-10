@@ -1,6 +1,6 @@
 from .collection import CollectionSerializer
 from .cart import CartItemSerializer,CartSerializer,AddCartItemSerializer,UpdateCartItemSerializer
 from .empty_serializer import EmptySerializer
-from .product import ProductSerailizer,ProductImageSerializer,SimpleProductSerializer
+from .product import ProductSerailizer,ProductImageSerializer
 from .order import OrderSerializer,OrderItemSerailizer,CreateOrderSerailzer,UpdateOrderSerializer
 from .review_reply import ReviewSerailizer,ReplySerializer

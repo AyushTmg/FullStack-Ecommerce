@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from utils.exception import CustomException as ce
 from rest_framework import serializers
-from .product import SimpleProductSerializer
+from .product import ProductSerailizer
 
 from ...models import (
     CartItem,
@@ -13,7 +13,7 @@ from ...models import (
 
 # ! Cart Item Serializer For View a Cart Item
 class CartItemSerializer(serializers.ModelSerializer):
-    product=SimpleProductSerializer()
+    product=ProductSerailizer(fields=['title','product_image'])
 
     # * Custom field for finding total price of an item in cart
     total_product_price=(

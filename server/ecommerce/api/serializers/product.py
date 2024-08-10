@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ...models import Product,ProductImage
-
+from common.serializers import DynamicModelSerializer
 
 
 
@@ -13,24 +13,9 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields=['id','image']
 
 
-# !Simple Product
-class SimpleProductSerializer(serializers.ModelSerializer):
-    product_image=ProductImageSerializer(many=True)
-
-
-    class Meta:
-        model=Product
-        fields=[
-            'id',
-            'title',
-            'price',
-            'product_image'
-        ]
-
-
         
 # !Product Serializer
-class ProductSerailizer(serializers.ModelSerializer):
+class ProductSerailizer(DynamicModelSerializer):
     product_image=ProductImageSerializer(many=True,read_only=True)
     is_available=serializers.BooleanField(default=True,read_only=True)
     upload_image=serializers.ListField(
