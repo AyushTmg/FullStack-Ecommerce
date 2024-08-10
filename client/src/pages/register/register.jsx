@@ -81,6 +81,9 @@ export default function UserRegister() {
                 <button className="btn btn-primary" type="submit">Register</button>
 
             </form>
+
+            <div onClick={() => navigate('/login')}>Login</div>
+
         </>
     )
 }
