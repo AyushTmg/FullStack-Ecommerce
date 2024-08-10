@@ -1,6 +1,6 @@
 from authentication.models import User 
 from .serializers import UserActivitySerializer
-from utils.response.response import CustomResponse as cr
+from utils.response import CustomResponse as cr
 
 
 from rest_framework.decorators import action

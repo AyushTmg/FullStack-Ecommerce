@@ -1,4 +1,4 @@
-from ...models.models import Product
+from ...models import Product
 from django_filters.rest_framework import FilterSet
 
 class ProductFilter(FilterSet):

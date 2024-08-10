@@ -1,6 +1,6 @@
 from rest_framework import permissions 
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
-from server.permissions import IsObjectUserOrAdminUserElseReadOnly
+from permissions import IsObjectUserOrAdminUserElseReadOnly
 
 
 class IsAdminOrReadOnlyPermissionMixin:
@@ -16,5 +16,8 @@ class AllowAnyPermissonMixin:
     permission_classes=[AllowAny]
 
 class IsAuthenticatedPermissionMixin:
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated] 
+
+class AdminPermissionMixin:
+    permission_classes=[IsAdminUser]
 
