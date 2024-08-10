@@ -1,0 +1,5 @@
+from .account_delete import UserAccountDeleteView
+from .change_password import UserChangePasswordView
+from .login import UserLoginView
+from .register import UserRegistrationView
+from .reset_password import SendResetPasswordEmailView,PassswordResetView
