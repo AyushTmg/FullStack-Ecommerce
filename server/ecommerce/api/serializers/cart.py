@@ -2,6 +2,7 @@ from rest_framework import serializers
 from utils.exception import CustomException as ce
 from rest_framework import serializers
 from .product import ProductSerailizer
+from common.serializers import DynamicModelSerializer
 
 from ...models import (
     CartItem,
@@ -12,7 +13,7 @@ from ...models import (
 
 
 # ! Cart Item Serializer For View a Cart Item
-class CartItemSerializer(serializers.ModelSerializer):
+class CartItemSerializer(DynamicModelSerializer):
     product=ProductSerailizer(fields=['title','product_image'])
 
     # * Custom field for finding total price of an item in cart
@@ -106,10 +107,19 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
 
 # !Cart Serializer 
 class CartSerializer(serializers.ModelSerializer):
-    cart_item=CartItemSerializer(many=True,read_only=True)
+    cart_item=CartItemSerializer(
+        fields=[
+            'id',
+            'product',
+            'quantity',
+            'total_product_price'
+        ],
+        many=True,
+        read_only=True
+    )
 
      # * Custom field for finding total price of cart incuding all cart items
-    total_price=serializers.SerializerMethodField(method_name='get_total_price')
+    total_price=serializers.SerializerMethodField()
 
 
     def get_total_price(self,cart):

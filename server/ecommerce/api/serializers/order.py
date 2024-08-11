@@ -3,6 +3,7 @@ from ...signals import order_created
 from utils.exception import CustomException as ce
 from rest_framework import serializers
 from django.db import transaction
+from common.serializers import DynamicModelSerializer
 from ...models import (
     Cart,
     CartItem,
@@ -13,7 +14,7 @@ from ...models import (
 
 
 # !Order Item Serializer
-class OrderItemSerailizer(serializers.ModelSerializer):
+class OrderItemSerailizer(DynamicModelSerializer):
     product=ProductSerailizer(fields=['title','product_image'])
     total_product_price=serializers.SerializerMethodField(method_name='get_total_product_price')
 
@@ -102,8 +103,17 @@ class CreateOrderSerailzer(serializers.Serializer):
 # ! Order Seriaizer For Viewing Orders 
 class  OrderSerializer(serializers.ModelSerializer):
     user=serializers.StringRelatedField()
-    order_item=OrderItemSerailizer(many=True,read_only=True)
-    total_price=serializers.SerializerMethodField('get_total_price')
+    order_item=OrderItemSerailizer(
+        fields=[
+            'id',
+            'product',
+            'quantity',
+            'total_product_price'
+        ]
+        ,many=True
+        ,read_only=True
+    )
+    total_price=serializers.SerializerMethodField()
 
 
     def get_total_price(self,order):

@@ -1,8 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin
 from .managers import CustomUserManager
+from .abstract import CustomAbstractBaseUser
 
-class User(AbstractBaseUser,PermissionsMixin):
+
+class User(CustomAbstractBaseUser,PermissionsMixin):
     first_name=models.CharField(max_length=150)
     last_name=models.CharField(max_length=150)
     username=models.CharField(max_length=150,unique=True)
@@ -11,8 +13,6 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_active=models.BooleanField(default=True)
     is_staff=models.BooleanField(default=False)
     is_superuser=models.BooleanField(default=False)
-    created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
     objects=CustomUserManager()
 
 
