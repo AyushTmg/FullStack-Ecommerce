@@ -1,6 +1,6 @@
 import uuid
 from django.db import models 
-from cuser.fields import CurrentUserField
+# from cuser.fields import CurrentUserField
 from django.utils import timezone
 
 
@@ -20,20 +20,20 @@ class TimeStampedModel(models.Model):
         ordering=['-created_at','-updated_at']
 
 
-class UserTrackedModel(models.Model):
-    created_by=CurrentUserField(
-        add_only=True,
-        related_name="%{app_label}s_%{class}s_created",
-        null=True
-    )
-    updated_by=CurrentUserField(
-        add_only=True,
-        related_name="%{app_label}s_%{class}s_updated",
-        null=True
-    )
+# class UserTrackedModel(models.Model):
+#     created_by=CurrentUserField(
+#         add_only=True,
+#         related_name="%{app_label}s_%{class}s_created",
+#         null=True
+#     )
+#     updated_by=CurrentUserField(
+#         add_only=True,
+#         related_name="%{app_label}s_%{class}s_updated",
+#         null=True
+#     )
 
-    class Meta:
-        abstract=True 
+#     class Meta:
+#         abstract=True 
 
 
 class SoftDeleteModel(models.Model):
