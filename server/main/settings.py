@@ -25,6 +25,7 @@ THIRD_PARTY_APPS=[
     'rest_framework_simplejwt',
     'django_filters',
     'corsheaders',
+    'django_extensions',
 ]
 
 # !INSTALLED APP'S
@@ -106,7 +107,6 @@ DATABASES = {
         'USER': 'postgres', 
         'PASSWORD':os.environ.get("DB_PASS"), 
         'HOST': 'localhost', 
-
     }
 }
 
