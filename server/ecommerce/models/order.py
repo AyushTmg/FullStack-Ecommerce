@@ -1,33 +1,42 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
-from .product import Product
+from common.models import BaseModel
 
 
 # !Order Model
-class Order(models.Model):
-    PENDING="P"
-    COMPLETE='C'
-    FAILED='F'
-    PAYMENT_STATUS=[
-        (PENDING,"Pending"),
+class Order(BaseModel):
+    PENDING = "PENDING"
+    SHIPPED = "SHIPPED"
+    CANCELED = "CANCELED"
+    RETURNED = "RETURNED"
+    COMPLETE='COMPLETED'
+
+    ORDER_STATUS_CHOICES = [
+        (PENDING, "Pending"),
+        (SHIPPED, "Shipped"),
+        (CANCELED, "Canceled"),
         (COMPLETE,"Complete"),
-        (FAILED,"Failed")
+        (RETURNED, "Returned"),
     ]
-    time_stamp=models.DateTimeField(auto_now=True)
-    payment_status=models.CharField(max_length=1,choices=PAYMENT_STATUS,default=PENDING)
+
+    order_status = models.CharField(
+        max_length=100,
+        choices=ORDER_STATUS_CHOICES,
+        default=PENDING
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='order')
-
-
+    
+    
     def __str__(self) -> str:
-        return f"{self.user} - {self.payment_status}"
+        return f"{self.user} - {self.order_status}"
     
 
     def cancel_order(self):
         """
         Cancel the order and set status to failed
         """
-        self.payment_status=self.FAILED
+        self.order_status=self.CANCELED
         self.save()
         return "Order is canceled"
 
@@ -35,11 +44,11 @@ class Order(models.Model):
 
 
 # !OrderItem Model
-class OrderItem(models.Model):
+class OrderItem(BaseModel):
     quantity=models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
         )
     order=models.ForeignKey(Order,on_delete=models.CASCADE,related_name='order_item')
-    product=models.ForeignKey(Product,on_delete=models.CASCADE,related_name='order_item')
+    product=models.ForeignKey('ecommerce.Product',on_delete=models.CASCADE,related_name='order_item')
 
 
