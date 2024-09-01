@@ -31,9 +31,6 @@ class ReplyViewSet(ModelViewSet):
     #* For Ordering reviews reply 
     filter_backends=[OrderingFilter]
 
-    #* For Specifying the fields for ordering
-    ordering_fields=['time_stamp']
-
     # !Custom Permission Called for Reply ViewSet 
     permission_classes=[IsObjectUserOrAdminUserElseReadOnly]
 

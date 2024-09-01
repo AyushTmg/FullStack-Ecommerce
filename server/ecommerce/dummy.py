@@ -89,7 +89,6 @@ def generate_dummy_review(num):
             description=fake.text(max_nb_chars=50),
             user=User.objects.get(id=user_id),
             product=Product.objects.get(id=product_id),
-            time_stamp=fake.date_time_this_decade(),
         )
 
 
@@ -107,7 +106,6 @@ def generate_dummy_reply(num):
             description=fake.text(max_nb_chars=50),
             user=User.objects.get(id=user_id),
             review=Review.objects.get(id=review_id),
-            time_stamp=fake.date_time_this_decade(),
         )
 
 
@@ -125,7 +123,6 @@ def generate_dummy_cart(num):
 
         cart = Cart.objects.create(
             user=User.objects.get(id=user_id),
-            time_stamp=fake.date_time_this_decade(),
         )
 
         CartItem.objects.create(
@@ -149,15 +146,13 @@ def generate_dummy_order(num):
 
         order = Order.objects.create(
             user=User.objects.get(id=user_id),
-            time_stamp=fake.date_time_this_decade(),
-            payment_status=random.choice([Order.PENDING, Order.COMPLETE, Order.FAILED]),
+            order_status=random.choice([Order.PENDING, Order.COMPLETE, Order.CANCELED]),
         )
 
         OrderItem.objects.create(
             quantity=random.randint(1, 15),
             order=order,
             product_id=product_id,
-            time_stamp=fake.date_time_this_decade(),
         )
 
 

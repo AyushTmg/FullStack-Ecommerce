@@ -140,7 +140,6 @@ class CartSerializer(serializers.ModelSerializer):
         fields=[
             'id',
             'cart_item',
-            'time_stamp',
             'total_price'
 
         ]

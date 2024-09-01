@@ -1,4 +1,3 @@
-from .collection import CollectionSerializer
 from .cart import CartItemSerializer,CartSerializer,AddCartItemSerializer,UpdateCartItemSerializer
 from .empty_serializer import EmptySerializer
 from .product import ProductSerailizer,ProductImageSerializer

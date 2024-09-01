@@ -134,9 +134,8 @@ class  OrderSerializer(serializers.ModelSerializer):
         fields=[
             'id',
             'user',
-            'payment_status',
+            'order_status',
             'order_item',
-            'time_stamp',
             'total_price',
         ]
 
@@ -147,7 +146,7 @@ class  OrderSerializer(serializers.ModelSerializer):
 class UpdateOrderSerializer(serializers.ModelSerializer):
     class Meta :
         model=Order
-        fields=['payment_status']
+        fields=['order_status']
 
 
 

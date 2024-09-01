@@ -38,7 +38,6 @@ class OrderViewSet(ModelViewSet):
     filter_backends=[OrderingFilter]
 
     #* For Specifying the fields for ordering
-    ordering_fields=['time_stamp']
 
     def get_permissions(self):
         """
@@ -69,7 +68,7 @@ class OrderViewSet(ModelViewSet):
         
         # ! For a normal User
         return (
-            Order.objects.exclude(Q(payment_status="F") | Q(payment_status="C"))
+            Order.objects.exclude(Q(order_status="CANCELED") | Q(order_status="COMPLETED"))
             .filter(user = self.request.user)
             .select_related('user')
             .prefetch_related(
@@ -220,13 +219,13 @@ class OrderViewSet(ModelViewSet):
         # ! If the method in POST
         if request.method == 'POST':
 
-            if order.payment_status=='F':
+            if order.order_status=='CANCELED':
                 return cr.success(
                     status=HTTP_400_BAD_REQUEST,
                     message="You order has already been cancelled"
                 )
             
-            elif order.payment_status=='C':
+            elif order.order_status=='COMPLETED':
                 return cr.error(
                     status=HTTP_403_FORBIDDEN,
                     message="Completed Orders cant be canceled"

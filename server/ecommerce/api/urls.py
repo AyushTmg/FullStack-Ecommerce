@@ -1,5 +1,4 @@
 from .views import (
-    CollectionViewSet,
     ProductViewSet,
     ProductImageViewSet,
     ReviewViewSet,
@@ -15,7 +14,6 @@ from rest_framework_nested import routers
 
 
 router=routers.DefaultRouter()
-router.register('collections',CollectionViewSet)
 router.register('products',ProductViewSet)
 router.register('cart',CartViewSet,basename='cart')
 router.register('order',OrderViewSet,basename='order')

@@ -28,9 +28,6 @@ class ReviewViewSet(ModelViewSet):
     #* For Ordering reviews   
     filter_backends=[OrderingFilter]
 
-    #* For Specifying the fields for ordering
-    ordering_fields=['time_stamp']
-
 
     def get_queryset(self):
         """ 

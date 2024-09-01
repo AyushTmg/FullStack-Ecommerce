@@ -9,6 +9,7 @@ from .models import (
     OrderItem,
     Cart,
     CartItem,
+    Wishlist
 )
 
 
@@ -147,7 +148,7 @@ view them by clicking on the number
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_per_page=10
-    list_display=['id','product','description','user','time_stamp','total_replies']
+    list_display=['id','product','description','user','total_replies']
     search_fields=['description__istartswith']
     autocomplete_fields=['user','product']
     list_filter=['user','product']
@@ -187,7 +188,7 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(Reply)
 class ReplyAdmin(admin.ModelAdmin):
     list_per_page=10
-    list_display=['id','review','description','user','time_stamp']
+    list_display=['id','review','description','user']
     autocomplete_fields=['user','review']
     list_filter=['user','review']
 
@@ -204,7 +205,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_per_page=10
-    list_display=['id','payment_status','user','time_stamp']
+    list_display=['id','order_status','user']
     autocomplete_fields=['user']
     list_filter=['user']
 
@@ -227,6 +228,12 @@ class CartItemAdmin(admin.ModelAdmin):
 
 
 
+
+
+# ! Order Item Inline 
+@admin.register(Wishlist)
+class OrderItemAdmin(admin.ModelAdmin):
+    pass
 
     
 

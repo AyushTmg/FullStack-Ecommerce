@@ -10,7 +10,7 @@ class DynamicModelSerializer(ModelSerializer):
         exclude_fields=kwargs.pop('exclude_fields',None)
         read_only_fields=kwargs.pop('read_only_fields',None)
         write_only_fields=kwargs.pop('write_only_fields',None)
-        super().__init__(instance,*args,*kwargs)
+        super().__init__(instance,*args,**kwargs)
 
 
         if fields is not None:

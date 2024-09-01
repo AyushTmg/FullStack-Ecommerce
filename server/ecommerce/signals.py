@@ -43,7 +43,7 @@ def on_order(sender,**kwargs):
 
 #! Signals Used when a user registers a account
 @receiver(signals.post_save,sender=settings.AUTH_USER_MODEL)
-def create_user_profile(sender,**kwargs):
+def create_user_cart(sender,**kwargs):
     """
     Whenever a User instance is save this function is 
     executed to create a associated cart for the user 

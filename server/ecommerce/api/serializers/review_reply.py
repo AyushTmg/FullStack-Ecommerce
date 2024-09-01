@@ -12,7 +12,6 @@ class ReplySerializer(serializers.ModelSerializer):
             'id',
             'user',
             'description',
-            'time_stamp'
         ]
 
 
@@ -45,7 +44,6 @@ class ReviewSerailizer(serializers.ModelSerializer):
             'id',
             'user',
             'description',
-            'time_stamp'
         ]
 
 
