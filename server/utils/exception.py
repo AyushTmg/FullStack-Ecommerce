@@ -19,5 +19,6 @@ class CustomException(APIException):
     status_code = HTTP_400_BAD_REQUEST 
     default_detail = {
         'success':False,
-        "message": ""
+        "message": "",
+        "errors":""
     }
