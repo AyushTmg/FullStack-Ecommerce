@@ -1,6 +1,6 @@
 
-from ...models import Product,ProductImage
-from ..serializers import ProductSerailizer,ProductImageSerializer
+from ...models import Product,ProductImage,Wishlist
+from ..serializers import ProductSerailizer,ProductImageSerializer,EmptySerializer
 
 from ..filters import ProductFilter
 from ..paginations import Default
@@ -10,8 +10,8 @@ from utils.response import CustomResponse as cr
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter,SearchFilter
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import IsAdminUser,AllowAny
+from rest_framework.permissions import IsAdminUser,AllowAny,IsAuthenticated
+from rest_framework.decorators import action
 
 from rest_framework.status import(
     HTTP_200_OK,
@@ -33,7 +33,6 @@ class ProductViewSet(ModelViewSet):
     serializer_class=ProductSerailizer
     http_method_names=['get','head','options','post','delete','patch']
     pagination_class=Default
-    parser_classes = [MultiPartParser, FormParser]
 
    
     #* For Searching,Filtering and Ordering products
@@ -50,12 +49,17 @@ class ProductViewSet(ModelViewSet):
     search_fields=['title','description']
     ordering_fields=['price']
 
+    def get_serializer_class(self):
+        if self.action=='wishlist':
+            return EmptySerializer
+        return ProductSerailizer
+
 
     def get_permissions(self):
         """
         Permission for Product ViewSet
         """
-        if self.request.method in permissions.SAFE_METHODS:
+        if self.request.method in permissions.SAFE_METHODS and not self.action:
             return [AllowAny()]
         return [IsAdminUser()]
     
@@ -66,8 +70,9 @@ class ProductViewSet(ModelViewSet):
         for creating Product object with the logged 
         in user
         """
-        user_id=self.request.user.id
-        return {'user_id':user_id}    
+        if self.request.user.is_authenticated:
+            user_id=self.request.user.id
+            return {'user_id':user_id}    
 
 
     def list(self, request, *args, **kwargs):
@@ -164,6 +169,43 @@ class ProductViewSet(ModelViewSet):
             status=HTTP_204_NO_CONTENT,
             message="Product has been successfully deleted"
         )
+    
+
+    @action(
+        detail=True,
+        methods=['GET',"POST",'DELETE'],
+        permission_classes=[IsAuthenticated] 
+    )
+    def wishlist(self,request,pk):
+        user_id=request.user.id
+
+
+        if request.method=='GET':
+            if Wishlist.objects.filter(user_id=user_id,product_id=pk).exists():
+                return cr.success(
+                    data={"on_wishlist":True}
+                )
+            return cr.success(
+                data={"on_wishlist":False}
+            )
+        
+        if request.method=='POST':
+            Wishlist.objects.create(user_id=user_id,product_id=pk)
+            return cr.success(
+                message="Added product on wishlist"
+            )
+        
+
+        if request.method=='DELETE':
+            Wishlist.objects.get(user_id=user_id,product_id=pk).delete()
+            return cr.success(
+                message="Removed product from the wishlist"
+            )
+        
+        
+        
+    
+    
 
 
 

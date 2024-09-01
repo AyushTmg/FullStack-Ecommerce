@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ...models import Product,ProductImage
 from common.serializers import DynamicModelSerializer
+from utils.exception import CustomException as ce
 
 
 
@@ -36,6 +37,13 @@ class ProductSerailizer(DynamicModelSerializer):
             'product_image',
             'upload_image'
         ]
+
+    def validate_upload_image(self,value):
+        if len(value)>5:
+            raise ce(
+                message="You cannot upload more than 5 images."
+            )
+        return value
 
 
     def create(self, validated_data):
