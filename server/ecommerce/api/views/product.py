@@ -12,6 +12,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter,SearchFilter
 from rest_framework.permissions import IsAdminUser,AllowAny,IsAuthenticated
 from rest_framework.decorators import action
+from common.permissions import IsObjectUserOrAdminUserElseReadOnly
 
 from rest_framework.status import(
     HTTP_200_OK,
@@ -30,9 +31,10 @@ class ProductViewSet(ModelViewSet):
         .select_related('collection')
         .prefetch_related('product_image')
     )
-    
+
     http_method_names=['get','head','options','post','delete','patch']
     pagination_class=Default
+    permission_classes=[IsObjectUserOrAdminUserElseReadOnly]
 
    
     #* For Searching,Filtering and Ordering products
@@ -49,20 +51,12 @@ class ProductViewSet(ModelViewSet):
     search_fields=['title','description']
     ordering_fields=['price']
 
+
     def get_serializer_class(self):
         if self.action=='wishlist':
             return EmptySerializer
         return ProductSerailizer
 
-
-    def get_permissions(self):
-        """
-        Permission for Product ViewSet
-        """
-        if self.request.method in permissions.SAFE_METHODS and not self.action:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
 
     def get_serializer_context(self):
         """ 
@@ -70,7 +64,7 @@ class ProductViewSet(ModelViewSet):
         for creating Product object with the logged 
         in user
         """
-        if self.request.user.is_authenticated:
+        if self.request.user:
             user_id=self.request.user.id
             return {'user_id':user_id}    
 
