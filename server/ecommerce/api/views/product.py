@@ -30,7 +30,7 @@ class ProductViewSet(ModelViewSet):
         .select_related('collection')
         .prefetch_related('product_image')
     )
-    serializer_class=ProductSerailizer
+    
     http_method_names=['get','head','options','post','delete','patch']
     pagination_class=Default
 
@@ -100,7 +100,7 @@ class ProductViewSet(ModelViewSet):
         """
 
         instance = self.get_object()
-        serializer = self.serializer_class(instance)
+        serializer = self.get_serializer(instance)
         
         similar_products = (
             Product.objects
@@ -109,7 +109,7 @@ class ProductViewSet(ModelViewSet):
             .select_related('collection')
             .prefetch_related('product_image')
         )
-        related_serializer = self.serializer_class(similar_products, many=True)
+        related_serializer = self.get_serializer(similar_products, many=True)
 
         data = {
             'product_details': serializer.data,
