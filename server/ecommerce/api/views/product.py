@@ -12,6 +12,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter,SearchFilter
 from rest_framework.permissions import IsAdminUser,AllowAny,IsAuthenticated
 from rest_framework.decorators import action
+from common.permissions import IsObjectUserOrAdminUserElseReadOnly
 
 from rest_framework.status import(
     HTTP_200_OK,
@@ -30,9 +31,10 @@ class ProductViewSet(ModelViewSet):
         .select_related('collection')
         .prefetch_related('product_image')
     )
-    serializer_class=ProductSerailizer
+
     http_method_names=['get','head','options','post','delete','patch']
     pagination_class=Default
+    permission_classes=[IsObjectUserOrAdminUserElseReadOnly]
 
    
     #* For Searching,Filtering and Ordering products
@@ -49,20 +51,12 @@ class ProductViewSet(ModelViewSet):
     search_fields=['title','description']
     ordering_fields=['price']
 
+
     def get_serializer_class(self):
-        if self.action=='wishlist':
+        if  self.action=='add_to_wishlist':
             return EmptySerializer
         return ProductSerailizer
 
-
-    def get_permissions(self):
-        """
-        Permission for Product ViewSet
-        """
-        if self.request.method in permissions.SAFE_METHODS and not self.action:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
 
     def get_serializer_context(self):
         """ 
@@ -70,7 +64,7 @@ class ProductViewSet(ModelViewSet):
         for creating Product object with the logged 
         in user
         """
-        if self.request.user.is_authenticated:
+        if self.request.user:
             user_id=self.request.user.id
             return {'user_id':user_id}    
 
@@ -100,7 +94,7 @@ class ProductViewSet(ModelViewSet):
         """
 
         instance = self.get_object()
-        serializer = self.serializer_class(instance)
+        serializer = self.get_serializer(instance)
         
         similar_products = (
             Product.objects
@@ -109,7 +103,7 @@ class ProductViewSet(ModelViewSet):
             .select_related('collection')
             .prefetch_related('product_image')
         )
-        related_serializer = self.serializer_class(similar_products, many=True)
+        related_serializer = self.get_serializer(similar_products, many=True)
 
         data = {
             'product_details': serializer.data,
@@ -176,7 +170,7 @@ class ProductViewSet(ModelViewSet):
         methods=['GET',"POST",'DELETE'],
         permission_classes=[IsAuthenticated] 
     )
-    def wishlist(self,request,pk):
+    def add_to_wishlist(self,request,pk):
         user_id=request.user.id
 
 
@@ -202,6 +196,34 @@ class ProductViewSet(ModelViewSet):
                 message="Removed product from the wishlist"
             )
         
+        
+    @action(
+        detail=False,
+        methods=['GET'],
+        permission_classes=[IsAuthenticated] ,
+        pagination_class=Default
+    )
+    def wishlist(self,request):
+        user_id=request.user.id
+
+        if request.method=='GET':
+            product_ids = (
+                Wishlist.objects.filter(user=request.user)
+                .select_related('products','user')
+                .values_list('product_id', flat=True)
+            )
+            products=Product.objects.filter(id__in=product_ids)
+            page = self.paginate_queryset(products)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(products, many=True)
+            return cr.success(
+                data=serializer.data
+            )
+
+
         
         
     
