@@ -10,6 +10,8 @@ from ...permissions import IsObjectUserOrAdminUserElseReadOnly
 from utils.response import CustomResponse as cr 
 from ..paginations import Default
 from common.mixins import UserContextMixin
+from common.views import ReadCreateDeleteViewSet
+
 
 
 from rest_framework.viewsets import ModelViewSet
@@ -23,8 +25,7 @@ from rest_framework.status import(
 
 
 #  ! Reply View 
-class ReplyViewSet(UserContextMixin,ModelViewSet):
-    http_method_names=['get','head','options','post','delete']
+class ReplyViewSet(UserContextMixin,ReadCreateDeleteViewSet):
     serializer_class=ReplySerializer
     pagination_class=Default
 

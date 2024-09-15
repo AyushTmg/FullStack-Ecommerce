@@ -5,9 +5,8 @@ from utils.response import CustomResponse as cr
 from ..paginations import Default
 from ...permissions import IsObjectUserOrAdminUserElseReadOnly
 from common.mixins import UserContextMixin
+from common.views import ReadCreateDeleteViewSet
 
-
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter
 
 from rest_framework.status import(
@@ -18,7 +17,7 @@ from rest_framework.status import(
 
 
 # ! Review ViewSet
-class ReviewViewSet(UserContextMixin,ModelViewSet):
+class ReviewViewSet(UserContextMixin,ReadCreateDeleteViewSet):
     serializer_class=ReviewSerailizer
     pagination_class=Default
 
