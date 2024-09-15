@@ -44,11 +44,11 @@ class CreateOrderSerailzer(serializers.Serializer):
         """
         Method for validating cart id 
         """
-        user_id=self.context['user_id']
-        cart=Cart.objects.get(user_id=user_id)
+        user=self.context['user']
+        cart=Cart.objects.get(user=user)
         if  not cart:
             raise ce(
-                message="Cart with given cart id user_id  doesnt exists"
+                message="Cart with given cart id user doesnt exists"
             )
         
         if CartItem.objects.filter(cart=cart).count() == 0:
@@ -65,13 +65,13 @@ class CreateOrderSerailzer(serializers.Serializer):
         orders all the cart item in the cart 
         """
         with transaction.atomic():
-            user_id=self.context['user_id']
+            user=self.context['user']
             
             #! Get the cart object from db using validated data
-            cart=Cart.objects.get(user_id=user_id)
+            cart=Cart.objects.get(user=user)
 
-            # ! Create new order with the user_id
-            order=Order.objects.create(user_id=user_id)
+            # ! Create new order with the user
+            order=Order.objects.create(user=user)
 
             cart_items=CartItem.objects.filter(cart=cart)
             
@@ -91,7 +91,7 @@ class CreateOrderSerailzer(serializers.Serializer):
             cart.delete()
 
             # ! Creating another cart for the same user after deleting the ordered cart
-            Cart.objects.create(user_id=user_id)
+            Cart.objects.create(user=user)
 
             #  ! Custome signal fired 
             order_created.send_robust(self.__class__,order=order)

@@ -4,6 +4,7 @@ from ..serializers import  ReviewSerailizer
 from utils.response import CustomResponse as cr 
 from ..paginations import Default
 from ...permissions import IsObjectUserOrAdminUserElseReadOnly
+from common.mixins import UserContextMixin
 
 
 from rest_framework.viewsets import ModelViewSet
@@ -17,7 +18,7 @@ from rest_framework.status import(
 
 
 # ! Review ViewSet
-class ReviewViewSet(ModelViewSet):
+class ReviewViewSet(UserContextMixin,ModelViewSet):
     serializer_class=ReviewSerailizer
     pagination_class=Default
 
@@ -43,23 +44,13 @@ class ReviewViewSet(ModelViewSet):
             .select_related('user')
         )
     
-
-    def get_serializer_context(self):
-        """
-        Passing the product_id and user_id as 
-        serializer context for creating product
-        review instance
-        """
-
-        product_id=self.kwargs['product_pk']
-        user_id=self.request.user.id
-
-        return {
-            'product_id':product_id,
-            'user_id':user_id
-            }
     
-
+    def get_serializer_context(self):
+        context=super().get_serializer_context()
+        context['product_id']=self.kwargs['product_pk']
+        return context
+    
+    
     def create(self, request, *args, **kwargs):
         """
         Over-riding the method for custom response handling

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ...models import Product,ProductImage
 from common.serializers import DynamicModelSerializer
+from common.mixins import UserAssignMixin
 from utils.exception import CustomException as ce
 
 
@@ -14,9 +15,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields=['id','image']
 
 
-        
 # !Product Serializer
-class ProductSerailizer(DynamicModelSerializer):
+class ProductSerailizer(UserAssignMixin,DynamicModelSerializer):
     product_image=ProductImageSerializer(many=True,read_only=True)
     is_available=serializers.BooleanField(default=True,read_only=True)
     upload_image=serializers.ListField(
@@ -53,19 +53,11 @@ class ProductSerailizer(DynamicModelSerializer):
         context passed from ProductViewSet
         """
         uploaded_images=validated_data.pop('upload_image')
-        print("This is the uploaded images ",uploaded_images)
-        user_id=self.context['user_id']
-
-        product=(
-            Product.objects.create(
-                user_id=user_id,
-                **validated_data
-                )
-        )
-        
+        product=super().create(validated_data)
         # ! For Creating the Product Images 
         for image in uploaded_images:
             ProductImage.objects.create(product=product, image=image)
-
         return product
+
+
 

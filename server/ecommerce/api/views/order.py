@@ -7,6 +7,7 @@ from ..serializers import  OrderSerializer,CreateOrderSerailzer,UpdateOrderSeria
 from ..paginations import Default
 from ...tasks import send_order_cancellation_email_task
 from utils.response import CustomResponse as cr 
+from common.mixins import UserContextMixin
 
 
 from rest_framework.decorators import action
@@ -31,7 +32,7 @@ from django.shortcuts import get_object_or_404
 
 
 # ! Order ViewSet
-class OrderViewSet(ModelViewSet):
+class OrderViewSet(ModelViewSet,UserContextMixin):
     pagination_class=Default
 
     #* For Ordering  
@@ -91,15 +92,6 @@ class OrderViewSet(ModelViewSet):
         elif self.request.method in ['PUT','PATCH']:
             return UpdateOrderSerializer
         return OrderSerializer
-    
-    
-    def get_serializer_context(self):
-        """  
-        Method which pass user_id as context to
-        the serializer
-        """
-        user_id=self.request.user.id
-        return {'user_id':user_id}
     
 
     def list(self, request, *args, **kwargs):

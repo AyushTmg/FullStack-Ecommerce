@@ -9,6 +9,7 @@ from ..serializers import (
 from ...permissions import IsObjectUserOrAdminUserElseReadOnly
 from utils.response import CustomResponse as cr 
 from ..paginations import Default
+from common.mixins import UserContextMixin
 
 
 from rest_framework.viewsets import ModelViewSet
@@ -22,7 +23,7 @@ from rest_framework.status import(
 
 
 #  ! Reply View 
-class ReplyViewSet(ModelViewSet):
+class ReplyViewSet(UserContextMixin,ModelViewSet):
     http_method_names=['get','head','options','post','delete']
     serializer_class=ReplySerializer
     pagination_class=Default
@@ -51,19 +52,10 @@ class ReplyViewSet(ModelViewSet):
     
 
     def get_serializer_context(self):
-        """
-        Passing the review_id and user_id as 
-        serializer context for creating product
-        reply instance
-        """
-
-        review_id=self.kwargs['review_pk']
-        user_id=self.request.user.id
-
-        return {
-            'review_id':review_id,
-            'user_id':user_id
-        }
+        context=super().get_serializer_context()
+        context['review_id']=self.kwargs['review_pk']
+        return context
+    
     
 
     def list(self, request, *args, **kwargs):

@@ -7,12 +7,12 @@ from ..paginations import Default
 from utils.response import CustomResponse as cr 
 
 
-from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter,SearchFilter
-from rest_framework.permissions import IsAdminUser,AllowAny,IsAuthenticated
+from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework.decorators import action
 from common.permissions import IsObjectUserOrAdminUserElseReadOnly
+from common.mixins import UserContextMixin
 
 from rest_framework.status import(
     HTTP_200_OK,
@@ -25,7 +25,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 # !Product ViewSet
-class ProductViewSet(ModelViewSet):
+class ProductViewSet(UserContextMixin,ModelViewSet):
     queryset=(
         Product.objects.all()
         .select_related('collection')
@@ -57,16 +57,6 @@ class ProductViewSet(ModelViewSet):
             return EmptySerializer
         return ProductSerailizer
 
-
-    def get_serializer_context(self):
-        """ 
-        Passing the user_id as serializer context
-        for creating Product object with the logged 
-        in user
-        """
-        if self.request.user:
-            user_id=self.request.user.id
-            return {'user_id':user_id}    
 
 
     def list(self, request, *args, **kwargs):
@@ -150,6 +140,7 @@ class ProductViewSet(ModelViewSet):
             data=serializer.data,
             message="Product has been successfully updated"
         )
+
     
 
     def destroy(self, request, *args, **kwargs):
@@ -188,7 +179,6 @@ class ProductViewSet(ModelViewSet):
             return cr.success(
                 message="Added product on wishlist"
             )
-        
 
         if request.method=='DELETE':
             Wishlist.objects.get(user_id=user_id,product_id=pk).delete()
