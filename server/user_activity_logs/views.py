@@ -5,7 +5,7 @@ from utils.response import CustomResponse as cr
 
 from rest_framework.decorators import action
 from rest_framework.status  import HTTP_204_NO_CONTENT
-from rest_framework.viewsets import ModelViewSet
+from common.views import ListCreateRetrieveUpdateViewSet
 from rest_framework.filters import OrderingFilter,SearchFilter
 from rest_framework.permissions import IsAdminUser,IsAuthenticated
 
@@ -16,9 +16,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 # ! User Activity ViewSet 
-class UserActvityViewSet(ModelViewSet):
+class UserActvityViewSet(ListCreateRetrieveUpdateViewSet):
     permission_classes=[IsAdminUser]
-    http_method_names=['get','head','options','put','patch','delete']
 
     filter_backends=[
         DjangoFilterBackend,
