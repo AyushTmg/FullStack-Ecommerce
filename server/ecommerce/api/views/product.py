@@ -175,6 +175,10 @@ class ProductViewSet(UserContextMixin,ModelViewSet):
             )
         
         if request.method=='POST':
+            if Wishlist.objects.filter(user_id=user_id,product_id=pk).exists():
+                return cr.error(
+                    message="Product already exists in wishlist"
+                )
             Wishlist.objects.create(user_id=user_id,product_id=pk)
             return cr.success(
                 message="Added product on wishlist"
